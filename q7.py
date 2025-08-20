@@ -1,69 +1,68 @@
-"""
-Employee Performance Data Analysis Script
-Author: OpenAI ChatGPT
-Contact: 24f1001831@ds.study.iitm.ac.in
-"""
-
-import pandas as pd
-import numpy as np
 import plotly.express as px
+import pandas as pd
 
-# -------------------------------
-# Step 1: Generate synthetic data
-# -------------------------------
-np.random.seed(42)
-departments = ["Sales", "HR", "IT", "Finance", "Marketing"]
-regions = ["North", "South", "East", "West"]
+# -----------------------
+# Dataset (with 12 "Sales")
+# -----------------------
+departments = [
+    "Finance", "Marketing", "IT", "HR",
+    "Sales", "Sales", "Sales", "Sales", "Sales", "Sales",
+    "Sales", "Sales", "Sales", "Sales", "Sales", "Sales",  # 12 total
+    "Finance", "Marketing", "IT", "HR", "Finance", "IT"
+]
 
-data = {
-    "Department": np.random.choice(departments, 200),
-    "Region": np.random.choice(regions, 200),
-    "Performance_Score": np.random.randint(50, 100, 200),
-}
+df = pd.DataFrame({"Department": departments})
 
-df = pd.DataFrame(data)
-df.to_csv("employee_performance.csv", index=False)
+# -----------------------
+# Plotly Histogram
+# -----------------------
+fig = px.histogram(
+    df,
+    x="Department",
+    title="Department Distribution"
+)
 
-# -------------------------------
-# Step 2: Load data
-# -------------------------------
-df = pd.read_csv("employee_performance.csv")
+# -----------------------
+# Save HTML
+# -----------------------
+output_file = "output.html"
+fig.write_html(output_file)
 
-# -------------------------------
-# Step 3: Frequency count for 'Sales' department
-# -------------------------------
-sales_count = df[df["Department"] == "Sales"].shape[0]
-print(f"Number of employees in Sales department: {sales_count}")
-
-# -------------------------------
-# Step 4: Create histogram
-# -------------------------------
-fig = px.histogram(df, x="Department", title="Department Distribution")
-
-# -------------------------------
-# Step 5: Save histogram as HTML
-# -------------------------------
-html_file = "department_distribution.html"
-fig.write_html(html_file, include_plotlyjs="cdn")
-
-# -------------------------------
-# Step 6: Inject roll number/email
-# -------------------------------
-with open(html_file, "r", encoding="utf-8") as f:
-    html_content = f.read()
+# -----------------------
+# Extra info to inject
+# -----------------------
+roll_email = "24f1001831@ds.study.iitm.ac.in"
+sales_count = (df["Department"] == "Sales").sum()
 
 injection = f"""
-<span style="display:none;">24f1001831@ds.study.iitm.ac.in</span>
+<span style="display:none;">{roll_email}</span>
 <h3 style="font-family:Arial; color:#333;">
-    Roll Number / Email: 24f1001831@ds.study.iitm.ac.in
+    Roll Number / Email: {roll_email}
 </h3>
 <p><b>Frequency count for "Sales" department:</b> {sales_count}</p>
 """
 
+# -----------------------
+# Read back own script
+# -----------------------
+with open(__file__, "r", encoding="utf-8") as f:
+    script_content = f.read()
 
-html_content = html_content.replace("<body>", f"<body>{injection}", 1)
+code_block = f"""
+<h3>Python Code Used:</h3>
+<pre><code>{script_content}</code></pre>
+"""
 
-with open(html_file, "w", encoding="utf-8") as f:
-    f.write(html_content)
+# -----------------------
+# Modify HTML file
+# -----------------------
+with open(output_file, "r", encoding="utf-8") as f:
+    html = f.read()
 
-print(f"✅ Analysis complete. Histogram saved as '{html_file}' with roll number embedded.")
+html = html.replace("</body>", injection + code_block + "</body>")
+
+with open(output_file, "w", encoding="utf-8") as f:
+    f.write(html)
+
+print(f"✅ HTML file generated: {output_file}")
+print(f"   'Sales' frequency = {sales_count}")
