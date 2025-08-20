@@ -1,5 +1,7 @@
 import plotly.express as px
 import pandas as pd
+import matplotlib
+import seaborn
 
 # -----------------------
 # Dataset (with 12 "Sales")
@@ -66,3 +68,4 @@ with open(output_file, "w", encoding="utf-8") as f:
 
 print(f"✅ HTML file generated: {output_file}")
 print(f"   'Sales' frequency = {sales_count}")
+
