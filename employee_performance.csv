@@ -1,0 +1,14 @@
+sector,asset,investment
+Technology,Google,8500000
+Technology,Microsoft,6700000
+Technology,Apple,9200000
+Finance,JPMorgan Chase,7800000
+Finance,Bank of America,6500000
+Healthcare,Johnson & Johnson,9100000
+Healthcare,Pfizer,5500000
+Energy,ExxonMobil,6200000
+Energy,Chevron,5800000
+Consumer Goods,Coca-Cola,7300000
+Consumer Goods,PepsiCo,6900000
+Real Estate,Prologis,5400000
+Real Estate,Equinix,4800000
